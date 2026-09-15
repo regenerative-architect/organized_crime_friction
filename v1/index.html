@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<title>organized crime friction platform</title>
+<meta name="description" content="A lawful, defensive, public-interest platform for designing distributed civic resilience against organized crime through prevention, transparency, restoration, legitimate opportunity, and institutional learning.">
+<style>
+:root{
+  --bg:#07111f; --panel:#0e1b2c; --panel2:#132238; --text:#eef5ff; --muted:#a8b7cb;
+  --line:#26364a; --good:#65d48e; --warn:#ffd166; --bad:#ff7b7b; --accent:#73b9ff;
+  --shadow:0 10px 30px rgba(0,0,0,.25); --radius:16px; --navw:280px;
+}
+@media (prefers-color-scheme:light){
+  :root{--bg:#eef4fa;--panel:#ffffff;--panel2:#f5f8fc;--text:#14202f;--muted:#5c6d80;--line:#d7e0ea;--shadow:0 8px 24px rgba(10,30,60,.08)}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+a{color:var(--accent)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{display:grid;grid-template-columns:var(--navw) 1fr;min-height:100vh}
+aside{position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--bg));padding:18px}
+main{min-width:0}
+.brand{font-weight:800;letter-spacing:.02em;font-size:1.03rem}
+.tag{display:inline-block;margin-top:8px;padding:4px 8px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:.8rem}
+.search{width:100%;margin:16px 0 10px;padding:10px 12px;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:12px}
+nav a{display:block;padding:8px 10px;border-radius:10px;text-decoration:none;color:var(--muted)}
+nav a:hover,nav a:focus{background:var(--panel2);color:var(--text)}
+.small{font-size:.86rem;color:var(--muted)}
+.hero{padding:48px clamp(20px,5vw,72px) 30px;border-bottom:1px solid var(--line);background:
+radial-gradient(circle at 80% 20%,rgba(115,185,255,.12),transparent 30%),
+radial-gradient(circle at 20% 30%,rgba(101,212,142,.10),transparent 28%)}
+.hero h1{margin:0 0 12px;font-size:clamp(2rem,5vw,4.5rem);line-height:.95;max-width:1000px}
+.hero p{max-width:850px;color:var(--muted);font-size:1.08rem}
+.hud{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:24px}
+.hud .metric{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:14px;padding:14px}
+.metric strong{display:block;font-size:1.35rem}
+.wrap{padding:24px clamp(16px,4vw,56px) 80px}
+section{margin:0 0 22px}
+.card,details{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card{padding:18px}
+details{margin:12px 0;overflow:hidden}
+summary{list-style:none;cursor:pointer;padding:16px 18px;font-weight:700;background:var(--panel2)}
+summary::-webkit-details-marker{display:none}
+details .inside{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border:1px solid var(--line);border-radius:999px;margin:3px;font-size:.83rem}
+.good{color:var(--good)} .warn{color:var(--warn)} .bad{color:var(--bad)}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px}
+.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:9px 12px;border-radius:10px}
+.btn.primary{border-color:transparent;background:var(--accent);color:#06111d;font-weight:800}
+.btn.good{background:rgba(101,212,142,.12);color:var(--text)}
+input[type="text"], input[type="number"], select, textarea{
+ width:100%;padding:10px 11px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--text)
+}
+textarea{min-height:120px;resize:vertical}
+label{display:block;font-weight:700;margin:8px 0 6px}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-size:.85rem;text-transform:uppercase;letter-spacing:.05em}
+.progress{height:10px;background:var(--panel2);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progress > span{display:block;height:100%;background:var(--good);width:0}
+.notice{border-left:4px solid var(--warn);padding:12px 14px;background:rgba(255,209,102,.08);border-radius:10px}
+.danger{border-left-color:var(--bad);background:rgba(255,123,123,.08)}
+.success{border-left-color:var(--good);background:rgba(101,212,142,.08)}
+.kbd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;background:var(--panel2);border:1px solid var(--line);padding:2px 5px;border-radius:6px}
+.module{position:relative}
+.module[data-hidden="true"]{display:none}
+.tooltip{border-bottom:1px dotted var(--muted);cursor:help}
+dialog{max-width:700px;width:calc(100% - 30px);border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--text)}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+footer{padding:28px clamp(16px,4vw,56px);border-top:1px solid var(--line);color:var(--muted)}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--panel2);border:1px solid var(--line);padding:12px;border-radius:10px}
+.badge{display:inline-block;padding:3px 7px;border-radius:8px;background:rgba(115,185,255,.12);border:1px solid var(--line);font-size:.8rem}
+@media(max-width:900px){
+ .app{grid-template-columns:1fr}
+ aside{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+ .hud,.grid,.grid3{grid-template-columns:1fr}
+}
+@media print{
+ aside,.btnrow,.search,.no-print{display:none!important}
+ .app{display:block}
+ body{background:#fff;color:#000}
+ .card,details{box-shadow:none;border:1px solid #bbb;background:#fff}
+ summary{background:#f3f3f3}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <div class="brand">organized crime friction platform</div>
+  <div class="tag">lawful · defensive · local-first</div>
+  <input id="search" class="search" type="search" placeholder="search modules…" aria-label="Search modules">
+  <nav id="nav">
+    <a href="#mission">mission seed</a>
+    <a href="#system">system map</a>
+    <a href="#portfolio">friction portfolio</a>
+    <a href="#adaptation">adaptation observatory</a>
+    <a href="#gamification">gamification</a>
+    <a href="#restoration">restoration engine</a>
+    <a href="#status">status economy</a>
+    <a href="#integrity">integrity toolkit</a>
+    <a href="#fraud">fraud friction</a>
+    <a href="#youth">youth alternatives</a>
+    <a href="#reentry">reentry pathways</a>
+    <a href="#evidence">measurement</a>
+    <a href="#genome">innovation genome</a>
+    <a href="#exchange">innovation exchange</a>
+    <a href="#redteam">anti-harm red team</a>
+    <a href="#promptchain">meta-prompt chain</a>
+  </nav>
+  <p class="small">No criminal targeting, accusation lists, hacking, infiltration, doxxing, surveillance, entrapment, or confrontation.</p>
+</aside>
+
+<main>
+<header class="hero">
+  <h1>make predatory systems harder to operate inside</h1>
+  <p>Design distributed civic resilience through prevention, restoration, transparency, legitimate opportunity, safer institutions, and measurable public benefit. This tool is built to generate different solutions for different people without creating vigilante infrastructure.</p>
+  <div class="hud">
+    <div class="metric"><span class="small">civic xp</span><strong id="xp">0</strong><span class="small">earned from constructive actions</span></div>
+    <div class="metric"><span class="small">modules active</span><strong id="activeModules">0</strong><span class="small">in your local project genome</span></div>
+    <div class="metric"><span class="small">safety score</span><strong id="safetyScore">100</strong><span class="small">higher is safer</span></div>
+    <div class="metric"><span class="small">adaptation debt</span><strong id="debt">minimal</strong><span class="small">hypothesis, not operational intel</span></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section id="mission" class="module" data-search="mission seed randomize audience geography">
+ <div class="card">
+  <h2>1. mission seed</h2>
+  <p>Generate a distinct project combination. The platform never randomizes toward criminal targeting; it randomizes toward <strong>safe civic friction</strong>.</p>
+  <div class="grid">
+   <div><label for="domain">mission domain</label><select id="domain"></select></div>
+   <div><label for="audience">primary population</label><select id="audience"></select></div>
+   <div><label for="institution">institution type</label><select id="institution"></select></div>
+   <div><label for="restorationTarget">restoration target</label><select id="restorationTarget"></select></div>
+  </div>
+  <div class="btnrow" style="margin-top:12px">
+    <button class="btn primary" id="randomizeSeed">randomize seed</button>
+    <button class="btn" id="saveSeed">save to genome</button>
+  </div>
+  <div id="missionStatement" class="notice success" style="margin-top:12px"></div>
+ </div>
+</section>
+
+<section id="system" class="module" data-search="system map pressures friction corruption recruitment finance">
+ <details open>
+  <summary>2. system map — map pressures, not criminals</summary>
+  <div class="inside">
+   <p>Choose pressures your platform should address. These stay abstract and non-identifying.</p>
+   <div id="pressureList" class="grid3"></div>
+   <h3>selected pressure → lawful countermeasure</h3>
+   <div id="pressureOutput"></div>
+  </div>
+ </details>
+</section>
+
+<section id="portfolio" class="module" data-search="friction portfolio person family community institution economy">
+ <details open>
+  <summary>3. five-layer friction portfolio</summary>
+  <div class="inside">
+   <div id="portfolioGrid" class="grid"></div>
+   <div class="btnrow"><button class="btn good" id="addPortfolioToGenome">add portfolio to genome +25 xp</button></div>
+  </div>
+ </details>
+</section>
+
+<section id="adaptation" class="module" data-search="adaptation observatory displacement response evidence">
+ <details open>
+  <summary>4. adaptation observatory</summary>
+  <div class="inside">
+   <div class="notice">Record interventions and public outcomes only. Do not store names of alleged offenders or sensitive targeting information.</div>
+   <div class="grid">
+    <div>
+     <label>intervention type</label><input id="obsIntervention" type="text" placeholder="e.g. vendor conflict-of-interest disclosure">
+     <label>public outcome</label><textarea id="obsOutcome" placeholder="What changed publicly or institutionally?"></textarea>
+    </div>
+    <div>
+     <label>evidence quality</label>
+     <select id="obsEvidence"><option>Anecdote</option><option>Early signal</option><option>Observational</option><option>Quasi-experimental</option><option>Controlled evidence</option><option>Systematic review</option></select>
+     <label>possible displacement category</label>
+     <select id="obsDisplacement"><option>financial</option><option>geographic</option><option>technological</option><option>organizational</option><option>recruitment-based</option><option>institutional</option><option>market-based</option></select>
+     <label>recommended lawful adjustment</label><textarea id="obsAdjustment"></textarea>
+    </div>
+   </div>
+   <div class="btnrow"><button class="btn primary" id="addObservation">add observation</button><button class="btn" id="clearObservations">clear local observations</button></div>
+   <div id="observationTable"></div>
+  </div>
+ </details>
+</section>
+
+<section id="gamification" class="module" data-search="gamification xp guild skill quest badge">
+ <details open>
+  <summary>5. prosocial game system</summary>
+  <div class="inside">
+   <p>Earn status from mastery, service, repair, stewardship, teaching, and verified contribution—not accusations, confrontation, or punishment.</p>
+   <div id="questGrid" class="grid3"></div>
+  </div>
+ </details>
+</section>
+
+<section id="restoration" class="module" data-search="restoration orchards gardens repair habitat food trees water">
+ <details open>
+  <summary>6. restoration engine</summary>
+  <div class="inside">
+   <div class="grid">
+    <div>
+      <label>project type</label><select id="restorationSelect"></select>
+      <label>local objective</label><input id="restorationObjective" type="text" placeholder="e.g. establish a school orchard starter nursery">
+      <label>success metric</label><input id="restorationMetric" type="text" placeholder="e.g. 85% survival after 12 months">
+    </div>
+    <div>
+      <h3>project template</h3>
+      <div id="restorationTemplate" class="notice success"></div>
+    </div>
+   </div>
+   <div class="btnrow"><button class="btn good" id="saveRestoration">save restoration project +30 xp</button></div>
+  </div>
+ </details>
+</section>
+
+<section id="status" class="module" data-search="status economy belonging mastery mentor recognition">
+ <details>
+  <summary>7. legitimate status economy</summary>
+  <div class="inside">
+   <table>
+    <thead><tr><th>harmful lure</th><th>legitimate replacement</th><th>possible badge</th></tr></thead>
+    <tbody>
+      <tr><td>status</td><td>mastery + public contribution</td><td><span class="badge">trusted builder</span></td></tr>
+      <tr><td>belonging</td><td>guilds, teams, mentorship</td><td><span class="badge">community anchor</span></td></tr>
+      <tr><td>money</td><td>apprenticeship + enterprise pathways</td><td><span class="badge">earned independence</span></td></tr>
+      <tr><td>protection</td><td>credible institutions + mutual support</td><td><span class="badge">resilience steward</span></td></tr>
+      <tr><td>adventure</td><td>restoration, emergency response, expeditions</td><td><span class="badge">field restorer</span></td></tr>
+      <tr><td>recognition</td><td>verified proof-of-contribution portfolio</td><td><span class="badge">mentor</span></td></tr>
+   </tbody></table>
+  </div>
+ </details>
+</section>
+
+<section id="integrity" class="module" data-search="anti corruption procurement transparency whistleblower beneficial ownership integrity">
+ <details open>
+  <summary>8. institutional integrity toolkit</summary>
+  <div class="inside">
+   <div id="integrityChecklist" class="grid"></div>
+   <p class="notice"><strong>Rule:</strong> a red flag is not guilt. It is a prompt for legitimate review using due process.</p>
+  </div>
+ </details>
+</section>
+
+<section id="fraud" class="module" data-search="fraud scam impersonation payment verify timer">
+ <details>
+  <summary>9. fraud friction laboratory</summary>
+  <div class="inside">
+   <div class="grid">
+    <div>
+      <label>scenario</label>
+      <select id="fraudScenario"></select>
+      <label>decision friction timer (seconds)</label><input id="frictionSeconds" type="number" min="5" max="300" value="30">
+      <div class="btnrow"><button class="btn primary" id="startTimer">start pause timer</button></div>
+      <p id="timerOutput" class="notice">Pause. Verify independently. Use trusted channels.</p>
+    </div>
+    <div>
+      <h3>safe response protocol</h3>
+      <ol>
+       <li>pause before irreversible action</li>
+       <li>verify identity through an independently sourced channel</li>
+       <li>seek a second-party review for unusual payments</li>
+       <li>protect credentials and recovery codes</li>
+       <li>document safely and contact the relevant institution</li>
+      </ol>
+    </div>
+   </div>
+  </div>
+ </details>
+</section>
+
+<section id="youth" class="module" data-search="youth alternatives capability direction choice leadership logistics strategy">
+ <details open>
+  <summary>10. capability → direction → choice</summary>
+  <div class="inside">
+    <div id="capabilityGrid" class="grid3"></div>
+  </div>
+ </details>
+</section>
+
+<section id="reentry" class="module" data-search="reentry restoration portfolio employment credential apprenticeship">
+ <details>
+  <summary>11. reentry & restoration pathways</summary>
+  <div class="inside">
+   <div class="grid">
+    <div><label>skills already held</label><textarea id="reentrySkills" placeholder="List capabilities without glorifying harmful activity."></textarea></div>
+    <div><label>future pathway</label><textarea id="reentryPath" placeholder="e.g. irrigation technician → horticulture credential → municipal parks apprenticeship"></textarea></div>
+   </div>
+   <div class="btnrow"><button class="btn good" id="saveReentry">save pathway +20 xp</button></div>
+  </div>
+ </details>
+</section>
+
+<section id="evidence" class="module" data-search="evidence metrics recidivism measurement outcome hypothesis">
+ <details open>
+  <summary>12. measurement that matters</summary>
+  <div class="inside">
+   <div class="grid3" id="metricsGrid"></div>
+   <label>hypothesis / claim under test</label><input id="claimText" type="text" placeholder="e.g. apprenticeship access lowers recruitment vulnerability">
+   <label>evidence quality</label><select id="claimQuality"><option>Anecdote</option><option>Early signal</option><option>Observational</option><option>Quasi-experimental</option><option>Controlled evidence</option><option>Systematic review</option></select>
+   <div class="btnrow"><button class="btn" id="saveClaim">save evidence note</button></div>
+  </div>
+ </details>
+</section>
+
+<section id="genome" class="module" data-search="json export import genome project data">
+ <details open>
+  <summary>13. innovation genome</summary>
+  <div class="inside">
+   <p>Your project is stored locally in this browser. Export JSON to share or remix without exposing sensitive personal data.</p>
+   <div class="btnrow">
+    <button class="btn primary" id="exportJson">export genome json</button>
+    <label class="btn" for="importJson" style="display:inline-block">import genome json</label>
+    <input id="importJson" class="no-print" type="file" accept=".json,application/json" hidden>
+    <button class="btn" id="downloadHtmlSnapshot">download html snapshot</button>
+    <button class="btn" id="resetAll">reset local project</button>
+   </div>
+   <pre id="genomePreview"></pre>
+  </div>
+ </details>
+</section>
+
+<section id="exchange" class="module" data-search="innovation exchange compare remix merge mutation crossover">
+ <details>
+  <summary>14. innovation exchange</summary>
+  <div class="inside">
+    <label>paste another project's genome JSON</label>
+    <textarea id="compareJson" placeholder='{"mission":"...","modules":[]}'></textarea>
+    <div class="btnrow"><button class="btn primary" id="compareProjects">compare</button><button class="btn" id="mutateProject">generate mutation</button></div>
+    <div id="compareOutput"></div>
+  </div>
+ </details>
+</section>
+
+<section id="redteam" class="module" data-search="anti harm safety vigilantism privacy retaliation abuse red team">
+ <details open>
+  <summary>15. anti-harm red team</summary>
+  <div class="inside">
+   <p>Check every platform idea against abuse risks before treating it as ready for deployment.</p>
+   <div id="redteamChecklist" class="grid"></div>
+   <div class="progress"><span id="safetyBar"></span></div>
+   <p id="safetyNote" class="small"></p>
+  </div>
+ </details>
+</section>
+
+<section id="promptchain" class="module" data-search="meta prompt chain autosolve generate index html prompt">
+ <details open>
+  <summary>16. autosolve meta-prompt generator</summary>
+  <div class="inside">
+   <p>Generate a tailored prompt that another user/model can use to create a <em>different</em> lawful civic-resilience platform.</p>
+   <div class="grid">
+    <div><label>jurisdiction / context</label><input id="promptJurisdiction" type="text" placeholder="e.g. municipal, national, school district, rural region"></div>
+    <div><label>special constraint</label><input id="promptConstraint" type="text" placeholder="e.g. low bandwidth, youth focus, prison education, small business"></div>
+   </div>
+   <div class="btnrow"><button class="btn primary" id="generatePrompt">generate meta-prompt</button><button class="btn" id="copyPrompt">copy</button></div>
+   <textarea id="promptOutput" style="min-height:420px"></textarea>
+  </div>
+ </details>
+</section>
+
+</div>
+<footer>
+ <strong>Attributions & licenses</strong>
+ <p>This original interface is released under the MIT License for peaceful, lawful civic resilience and restoration. It intentionally avoids criminal targeting, doxxing, hacking, surveillance, entrapment, weapons, or operational guidance. Design patterns are generic web-app conventions; no proprietary source code is copied.</p>
+ <p class="small">This tool is educational and planning-oriented. It does not replace legal advice, law-enforcement reporting channels, victim services, professional security guidance, or accredited institutional review.</p>
+</footer>
+</main>
+</div>
+
+<dialog id="helpDialog">
+ <form method="dialog">
+  <h2 id="helpTitle">module help</h2>
+  <div id="helpBody"></div>
+  <div class="btnrow"><button class="btn primary">close</button></div>
+ </form>
+</dialog>
+
+<noscript>
+<div style="padding:20px;background:#fff;color:#000">
+ <h2>JavaScript is disabled</h2>
+ <p>You can still read and print this document, but local gamification, JSON import/export, search, and generators require JavaScript.</p>
+</div>
+</noscript>
+
+<script>
+const DATA = {
+ domains:["anti-extortion resilience","fraud resistance","financial literacy","youth recruitment prevention","community employment","ethical procurement","supply-chain transparency","victim navigation","whistleblower education","public corruption literacy","institutional integrity","restorative justice","reentry pathways","food sovereignty","edible infrastructure","ecological restoration","trade apprenticeships","small-business resilience","anti-trafficking awareness","digital scam resistance","community emergency resilience","repair economies","housing stability","addiction recovery navigation"],
+ audiences:["young adults","small businesses","families","schools","older adults","returning citizens","municipal staff","nonprofits","workers","rural communities","urban neighborhoods","correctional education participants"],
+ institutions:["municipality","school system","correctional institution","community college","small-business association","nonprofit network","public agency","cooperative","library system","workforce board"],
+ restoration:["community orchard","repair network","native plant nursery","food forest","tool library","trade apprenticeship","community kitchen","pollinator corridor","water stewardship","bicycle repair hub","soil restoration","emergency logistics network"],
+ pressures:{
+  "money laundering opacity":"beneficial-ownership literacy, transparent procurement, financial controls",
+  "youth recruitment":"mentorship, apprenticeships, legitimate status, paid skills pathways",
+  "fear and silence":"protected reporting, victim support, anti-retaliation safeguards",
+  "institutional fragmentation":"shared protocols, interoperable referrals, clear escalation paths",
+  "fraud vulnerability":"pause-and-verify routines, payment friction, independent callbacks",
+  "economic desperation":"employment pathways, microenterprise support, training, social protection",
+  "corruption access":"dual authorization, conflict disclosures, rotation, auditability",
+  "information asymmetry":"public explainers, clear rights navigation, evidence literacy",
+  "weak reentry":"credentials, employer pipelines, savings, housing and mentorship",
+  "opaque procurement":"decision logs, vendor due diligence, scoring transparency",
+  "social isolation":"community guilds, mentoring, trusted institutions, peer networks",
+  "market demand":"education, harm reduction, legitimate substitutes, public-health approaches"
+ },
+ portfolio:{
+  "PERSON":"skills, financial resilience, digital literacy, help-seeking, agency",
+  "FAMILY":"fraud defenses, crisis planning, education pathways, food security",
+  "COMMUNITY":"mentorship, repair networks, small-business resilience, trusted services",
+  "INSTITUTION":"integrity controls, transparent processes, accountability, redundancy",
+  "ECONOMY":"legitimate livelihoods, ethical supply chains, ownership transparency, restoration jobs"
+ },
+ quests:[
+  ["fraud shield","Complete a scam-resilience scenario and write a household verification rule.",15],
+  ["skill mapper","Map one risky-status capability into a lawful profession or civic role.",10],
+  ["restoration starter","Create one measurable restoration project with a 12-month success metric.",20],
+  ["integrity builder","Complete an institutional integrity checklist for a real or hypothetical organization.",20],
+  ["mentor path","Design a youth pathway connecting belonging, mastery, income, and service.",15],
+  ["evidence keeper","Record one claim and label its evidence quality correctly.",10]
+ ],
+ restorationProjects:["fruit-tree nursery","community orchard","food forest","urban garden","seed library","repair café","bicycle restoration","tool library","habitat restoration","native plant nursery","rainwater system","soil restoration","compost program","community kitchen","trade apprenticeship","energy retrofit","fraud-resistance clinic","youth mentorship"],
+ integrity:[
+  "Conflict-of-interest disclosure exists and is easy to understand",
+  "High-risk approvals require more than one authorized person",
+  "Vendor selection criteria are documented before decisions",
+  "Whistleblower / concern reporting channels are clearly signposted",
+  "Gift and hospitality rules are explicit",
+  "Decisions affecting public funds have an audit trail",
+  "Sensitive roles include rotation or review safeguards where appropriate",
+  "Beneficial-ownership checks are understood where legally relevant"
+ ],
+ fraudScenarios:["urgent invoice change","executive impersonation","romance scam","investment pitch","fake charity appeal","job scam","marketplace fraud","account takeover alert","AI voice impersonation"],
+ capabilities:{
+  "nerve":"emergency response, field operations, crisis leadership",
+  "loyalty":"mentorship, team stewardship, long-term community service",
+  "social intelligence":"mediation, teaching, negotiation, outreach",
+  "pattern recognition":"fraud prevention, data quality, auditing, research",
+  "entrepreneurship":"small business, cooperative enterprise, social enterprise",
+  "logistics":"disaster response, food distribution, supply-chain resilience",
+  "risk tolerance":"field science, emergency services, entrepreneurship",
+  "technical aptitude":"defensive cybersecurity, repair, engineering, maintenance",
+  "strategy":"policy design, operations planning, community resilience",
+  "leadership":"apprenticeship supervision, coaching, public service"
+ },
+ metrics:["skills mastered","credentials earned","employment attained","employment retained","fraud losses prevented where measurable","victims connected with services","projects maintained","trees surviving after one year","housing stability","program retention","institutional response time","community trust"],
+ redteam:[
+  "Could this enable vigilantism?",
+  "Could it facilitate false accusations?",
+  "Could it expose victims or whistleblowers?",
+  "Could it create a target list?",
+  "Could it collect unnecessary sensitive information?",
+  "Could authorities or employers misuse it?",
+  "Could game mechanics reward harmful reporting behavior?",
+  "Could restorative labor become coercive?",
+  "Could metrics be gamed?",
+  "Could a dashboard stigmatize a community?"
+ ]
+};
+
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+let state = JSON.parse(localStorage.getItem("ocfp_state") || "null") || {
+ project_id:"ocfp_"+Math.random().toString(36).slice(2,10),
+ version:"1.0.0", seed:{}, mission:"", audience:[], friction_vectors:[], restoration_vectors:[],
+ skill_paths:[], game_mechanics:[], institutional_tools:[], metrics:[], evidence_notes:[],
+ safety_constraints:["no vigilantism","no accusation lists","no doxxing","no hacking","no criminal targeting","no confrontation"],
+ modules:[], innovations:[], open_questions:[], observations:[], xp:0
+};
+
+function save(){ localStorage.setItem("ocfp_state", JSON.stringify(state)); renderGenome(); updateHud(); }
+function addXP(n){ state.xp=(state.xp||0)+n; save(); }
+function opt(select, arr){ select.innerHTML=arr.map(x=>`<option>${x}</option>`).join(""); }
+
+opt($("#domain"), DATA.domains); opt($("#audience"), DATA.audiences); opt($("#institution"), DATA.institutions); opt($("#restorationTarget"), DATA.restoration);
+opt($("#restorationSelect"), DATA.restorationProjects); opt($("#fraudScenario"), DATA.fraudScenarios);
+
+function seedMission(){
+ const d=$("#domain").value,a=$("#audience").value,i=$("#institution").value,r=$("#restorationTarget").value;
+ state.seed={domain:d,audience:a,institution:i,restoration:r};
+ state.mission=`This platform increases friction against organized crime by strengthening ${d} for ${a} through a ${i}, while increasing legitimate opportunity and public value through ${r}.`;
+ $("#missionStatement").textContent=state.mission;
+}
+$("#randomizeSeed").onclick=()=>{
+ const pick=a=>a[Math.floor(Math.random()*a.length)];
+ $("#domain").value=pick(DATA.domains); $("#audience").value=pick(DATA.audiences); $("#institution").value=pick(DATA.institutions); $("#restorationTarget").value=pick(DATA.restoration);
+ seedMission();
+};
+$("#saveSeed").onclick=()=>{ seedMission(); state.modules=[...new Set([...(state.modules||[]),"mission seed"])]; addXP(10); };
+
+function renderPressures(){
+ $("#pressureList").innerHTML=Object.keys(DATA.pressures).map((p,i)=>`
+ <label class="card"><input type="checkbox" class="pressureCheck" value="${p}"> <strong>${p}</strong></label>`).join("");
+ $$(".pressureCheck").forEach(x=>x.onchange=()=>{
+   const chosen=$$(".pressureCheck:checked").map(c=>c.value);
+   state.friction_vectors=chosen;
+   $("#pressureOutput").innerHTML=chosen.length?chosen.map(p=>`<div class="notice success" style="margin:8px 0"><strong>${p}</strong> → ${DATA.pressures[p]}</div>`).join(""):"<p class='small'>Select one or more pressures.</p>";
+   save();
+ });
+}
+renderPressures();
+
+function renderPortfolio(){
+ $("#portfolioGrid").innerHTML=Object.entries(DATA.portfolio).map(([k,v])=>`<div class="card"><h3>${k}</h3><p>${v}</p></div>`).join("");
+}
+renderPortfolio();
+$("#addPortfolioToGenome").onclick=()=>{state.modules=[...new Set([...(state.modules||[]),"five-layer friction portfolio"])]; addXP(25);};
+
+function renderObservations(){
+ const rows=(state.observations||[]).map(o=>`<tr><td>${escapeHtml(o.intervention)}</td><td>${escapeHtml(o.outcome)}</td><td>${escapeHtml(o.evidence)}</td><td>${escapeHtml(o.displacement)}</td><td>${escapeHtml(o.adjustment)}</td></tr>`).join("");
+ $("#observationTable").innerHTML=state.observations?.length?`<table><thead><tr><th>intervention</th><th>outcome</th><th>evidence</th><th>displacement</th><th>lawful adjustment</th></tr></thead><tbody>${rows}</tbody></table>`:"<p class='small'>No local observations yet.</p>";
+}
+$("#addObservation").onclick=()=>{
+ const o={intervention:$("#obsIntervention").value.trim(),outcome:$("#obsOutcome").value.trim(),evidence:$("#obsEvidence").value,displacement:$("#obsDisplacement").value,adjustment:$("#obsAdjustment").value.trim()};
+ if(!o.intervention||!o.outcome)return alert("Add an intervention and public outcome.");
+ state.observations.push(o); addXP(10); renderObservations();
+};
+$("#clearObservations").onclick=()=>{ if(confirm("Clear local observations?")){state.observations=[];save();renderObservations();}};
+renderObservations();
+
+function renderQuests(){
+ $("#questGrid").innerHTML=DATA.quests.map((q,i)=>`<div class="card"><h3>${q[0]}</h3><p>${q[1]}</p><button class="btn quest" data-xp="${q[2]}" data-name="${q[0]}">complete +${q[2]} xp</button></div>`).join("");
+ $$(".quest").forEach(b=>b.onclick=()=>{
+   if(b.disabled)return;
+   b.disabled=true;b.textContent="completed";
+   state.game_mechanics=[...new Set([...(state.game_mechanics||[]),b.dataset.name])]; addXP(Number(b.dataset.xp));
+ });
+}
+renderQuests();
+
+function updateRestoration(){
+ const type=$("#restorationSelect").value;
+ $("#restorationTemplate").innerHTML=`<strong>${type}</strong><br>Skills: project planning, safe tool use, maintenance, measurement.<br>Partners: community groups, schools, municipalities, colleges, nonprofits.<br>Track: cost, participation, maintenance, 12‑month outcome, unintended effects.`;
+}
+$("#restorationSelect").onchange=updateRestoration; updateRestoration();
+$("#saveRestoration").onclick=()=>{
+ const rec={type:$("#restorationSelect").value,objective:$("#restorationObjective").value.trim(),metric:$("#restorationMetric").value.trim()};
+ if(!rec.objective||!rec.metric)return alert("Add an objective and measurable success metric.");
+ state.restoration_vectors.push(rec); addXP(30);
+};
+
+$("#integrityChecklist").innerHTML=DATA.integrity.map((x,i)=>`<label class="card"><input type="checkbox" class="integrityCheck" value="${escapeHtml(x)}"> ${x}</label>`).join("");
+$$(".integrityCheck").forEach(c=>c.onchange=()=>{state.institutional_tools=$$(".integrityCheck:checked").map(x=>x.value);save();});
+
+let timerInt=null;
+$("#startTimer").onclick=()=>{
+ clearInterval(timerInt);
+ let t=Math.max(5,Math.min(300,Number($("#frictionSeconds").value)||30));
+ $("#timerOutput").textContent=`${$("#fraudScenario").value}: pause for ${t}s. Verify through an independent channel.`;
+ timerInt=setInterval(()=>{t--;$("#timerOutput").textContent=t>0?`pause: ${t}s remaining — verify independently.`:"pause complete. Proceed only after independent verification.";if(t<=0)clearInterval(timerInt)},1000);
+};
+
+$("#capabilityGrid").innerHTML=Object.entries(DATA.capabilities).map(([k,v])=>`<div class="card"><h3>${k}</h3><p>${v}</p></div>`).join("");
+
+$("#saveReentry").onclick=()=>{
+ const s=$("#reentrySkills").value.trim(),p=$("#reentryPath").value.trim();
+ if(!s||!p)return alert("Add both current capabilities and a future pathway.");
+ state.skill_paths.push({skills:s,pathway:p}); addXP(20);
+};
+
+$("#metricsGrid").innerHTML=DATA.metrics.map(m=>`<label class="card"><input type="checkbox" class="metricCheck" value="${m}"> ${m}</label>`).join("");
+$$(".metricCheck").forEach(c=>c.onchange=()=>{state.metrics=$$(".metricCheck:checked").map(x=>x.value);save();});
+$("#saveClaim").onclick=()=>{
+ const claim=$("#claimText").value.trim(); if(!claim)return;
+ state.evidence_notes.push({claim,quality:$("#claimQuality").value}); addXP(10);
+};
+
+function renderRedteam(){
+ $("#redteamChecklist").innerHTML=DATA.redteam.map((q,i)=>`<label class="card"><input type="checkbox" class="redCheck" data-i="${i}"> ${q}</label>`).join("");
+ $$(".redCheck").forEach(c=>c.onchange=updateSafety);
+ updateSafety();
+}
+function updateSafety(){
+ const checked=$$(".redCheck:checked").length;
+ const score=Math.max(0,100-checked*10);
+ $("#safetyScore").textContent=score;
+ $("#safetyBar").style.width=score+"%";
+ $("#safetyNote").textContent=checked?`${checked} abuse-risk flag(s) detected. Redesign before deployment.`:"No abuse-risk flags marked yet. Continue red-teaming.";
+ state.safety_score=score; save();
+}
+renderRedteam();
+
+function renderGenome(){
+ $("#genomePreview").textContent=JSON.stringify(state,null,2);
+}
+function updateHud(){
+ $("#xp").textContent=state.xp||0;
+ $("#activeModules").textContent=(state.modules||[]).length + (state.restoration_vectors?.length?1:0) + (state.skill_paths?.length?1:0);
+ const pressureCount=(state.friction_vectors||[]).length;
+ const integrityCount=(state.institutional_tools||[]).length;
+ const lvl=pressureCount+integrityCount+(state.metrics||[]).length;
+ $("#debt").textContent=lvl>=14?"very high":lvl>=10?"high":lvl>=6?"moderate":lvl>=3?"low":"minimal";
+}
+renderGenome();updateHud();seedMission();
+
+$("#exportJson").onclick=()=>{
+ const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="organized_crime_friction_genome.json";a.click();URL.revokeObjectURL(a.href);
+};
+$("#importJson").onchange=async e=>{
+ const f=e.target.files[0];if(!f)return;
+ try{const obj=JSON.parse(await f.text());state={...state,...obj};save();renderObservations();alert("Genome imported locally.");}catch{alert("Invalid JSON file.");}
+};
+$("#downloadHtmlSnapshot").onclick=()=>{
+ const blob=new Blob([document.documentElement.outerHTML],{type:"text/html"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="index.html";a.click();URL.revokeObjectURL(a.href);
+};
+$("#resetAll").onclick=()=>{if(confirm("Reset all local project data?")){localStorage.removeItem("ocfp_state");location.reload();}};
+
+$("#compareProjects").onclick=()=>{
+ try{
+   const other=JSON.parse($("#compareJson").value);
+   const mine=new Set(state.modules||[]), theirs=new Set(other.modules||[]);
+   const shared=[...mine].filter(x=>theirs.has(x)), uniqueMine=[...mine].filter(x=>!theirs.has(x)), uniqueTheirs=[...theirs].filter(x=>!mine.has(x));
+   $("#compareOutput").innerHTML=`<div class="grid3">
+   <div class="card"><h3>shared</h3><p>${shared.join(", ")||"none"}</p></div>
+   <div class="card"><h3>unique here</h3><p>${uniqueMine.join(", ")||"none"}</p></div>
+   <div class="card"><h3>unique imported</h3><p>${uniqueTheirs.join(", ")||"none"}</p></div></div>`;
+ }catch{alert("Paste valid JSON.");}
+};
+$("#mutateProject").onclick=()=>{
+ const mutations=[
+  "Replace individual competition with cooperative guild milestones.",
+  "Move the same intervention from person-level to municipal-level.",
+  "Swap a reporting-heavy mechanism for a prevention-heavy mechanism.",
+  "Add a legitimate-status pathway tied to accredited training.",
+  "Reduce data collection by 50% while preserving the core outcome.",
+  "Add a 12-month maintenance metric to every restoration project.",
+  "Create an offline-first version for low-connectivity communities."
+ ];
+ const m=mutations[Math.floor(Math.random()*mutations.length)];
+ state.innovations.push(m);save();
+ $("#compareOutput").innerHTML=`<div class="notice success"><strong>mutation:</strong> ${m}</div>`;
+};
+
+$("#generatePrompt").onclick=()=>{
+ const j=$("#promptJurisdiction").value.trim()||"local civic context";
+ const c=$("#promptConstraint").value.trim()||"local-first, privacy-preserving, accessible";
+ const prompt=`Create a standalone index.html for a lawful, defensive civic-resilience platform.
+
+MISSION SEED:
+${state.mission}
+
+CONTEXT:
+Jurisdiction/context: ${j}
+Special constraint: ${c}
+
+DESIGN GOAL:
+Increase friction against organized crime indirectly by strengthening legitimate opportunity, institutional integrity, fraud resistance, public competence, victim support, anti-corruption safeguards, restoration, and adaptive civic learning.
+
+DO NOT include criminal targeting, accusation databases, hacking, doxxing, infiltration, covert surveillance, entrapment, weapons, retaliation, or confrontation.
+
+BUILD:
+1. A unique mission seed and visual metaphor.
+2. A system map of abstract pressures, never named offenders.
+3. A five-layer portfolio: person, family, community, institution, economy.
+4. An adaptation observatory recording only public outcomes, evidence quality, displacement category, and lawful adjustments.
+5. Prosocial gamification: mastery, service, stewardship, repair, mentoring, credentials.
+6. A restoration engine tied to legitimate livelihoods.
+7. A legitimate status economy replacing money/status/belonging/protection incentives with lawful equivalents.
+8. Institutional integrity tools such as conflict disclosures, dual authorization, decision logs, vendor due diligence, and whistleblower-resource navigation.
+9. Fraud-resilience simulations emphasizing pause, independent verification, second-party review, and trusted channels.
+10. A youth capability inversion map: nerve→emergency response; loyalty→mentorship; pattern recognition→auditing; logistics→disaster response; technical aptitude→defensive cybersecurity; strategy→operations planning.
+11. Reentry pathways emphasizing skills, credentials, housing, savings, employer pipelines, and proof-of-contribution portfolios.
+12. Outcome metrics that prioritize employment, retention, skills, credentials, fraud loss avoided where measurable, victim-service connection, project survival, institutional response time, housing stability, and community trust.
+13. Evidence labels: anecdote, early signal, observational, quasi-experimental, controlled evidence, systematic review.
+14. JSON import/export with provenance-aware remixing.
+15. Innovation exchange: compare, mutate, crossover, invert, simplify, scale, localize.
+16. Anti-harm red-team that rejects features enabling vigilantism, false accusation, retaliation, unnecessary sensitive-data collection, coercive labor, stigmatization, or target lists.
+17. Accessibility, client-side search, collapsible sections, print stylesheet, graceful noscript, local-first storage, no analytics by default.
+18. A built-in meta-prompt generator so another user can create a different platform from this one.
+
+INTEROPERABILITY:
+Use a machine-readable genome with:
+project_id, seed, mission, audience, friction_vectors, restoration_vectors, skill_paths, game_mechanics, institutional_tools, metrics, evidence_notes, safety_constraints, modules, innovations, open_questions, version.
+
+SAFETY TEST:
+Before finalizing, verify:
+- no accusation mechanism
+- no criminal-person database
+- no operational guidance for evasion or retaliation
+- no doxxing or surveillance
+- no confrontation incentives
+- no sensitive-data collection beyond what is strictly necessary
+- all red flags are framed as prompts for legitimate review, not proof of guilt
+
+OUTPUT:
+Return the complete production-ready index.html only, with embedded CSS/JS and clear comments for future expansion.`;
+ $("#promptOutput").value=prompt;
+};
+$("#copyPrompt").onclick=async()=>{await navigator.clipboard.writeText($("#promptOutput").value);$("#copyPrompt").textContent="copied";setTimeout(()=>$("#copyPrompt").textContent="copy",1200)};
+
+$("#search").oninput=e=>{
+ const q=e.target.value.toLowerCase().trim();
+ $$(".module").forEach(m=>{const text=(m.dataset.search+" "+m.innerText).toLowerCase();m.dataset.hidden=(q && !text.includes(q))?"true":"false";});
+};
+
+function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));}
+
+// IndexedDB fallback for larger local snapshots
+(function(){
+ const req=indexedDB.open("ocfp_db",1);
+ req.onupgradeneeded=e=>{const db=e.target.result;if(!db.objectStoreNames.contains("snapshots"))db.createObjectStore("snapshots",{keyPath:"id"});}
+ req.onsuccess=e=>{
+   const db=e.target.result;
+   const tx=db.transaction("snapshots","readwrite");
+   tx.objectStore("snapshots").put({id:"latest",savedAt:new Date().toISOString(),state});
+ };
+})();
+
+window.addEventListener("beforeprint",()=>$$("details").forEach(d=>d.open=true));
+</script>
+</body>
+</html>
